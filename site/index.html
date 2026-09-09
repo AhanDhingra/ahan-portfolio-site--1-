@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ══ EDIT: page metadata (search results + link previews) ══ -->
+<title>Ahan Dhingra — Engineering Physics, UBC</title>
+<meta name="description" content="Engineering Physics student at UBC building at the intersection of sustainable technology, electronics, and applied design.">
+<meta property="og:title" content="Ahan Dhingra">
+<meta property="og:description" content="Engineering Physics student at UBC — sustainable technology, electronics, applied design.">
+<meta property="og:type" content="website">
+<!-- <meta property="og:image" content="https://yoursite.com/og-image.png"> -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS — these values control the whole site.
+   Type: Space Grotesk (content) + Space Mono (labels, nav, numbers)
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --paper:    #e8eae4;   /* page background          */
+  --paper-2:  #f1f2ec;   /* empty photo slots        */
+  --ink:      #14161a;   /* text + structural rules  */
+  --ink-soft: #3a3e3d;   /* secondary text           */
+  --rule:     #cbcec6;   /* hairlines                */
+  --accent:   #a8352a;   /* brick red — index layer  */
+
+  --sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --rail:17rem; --gut:clamp(1.5rem,3.5vw,3rem);
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:1rem; line-height:1.62; font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  transition:background .4s var(--ease), color .4s var(--ease);
+}
+a{ color:inherit; text-decoration:none; }
+img{ display:block; width:100%; height:100%; object-fit:cover; }
+::selection{ background:var(--accent); color:var(--paper); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
+/* the mono layer = anything the page says about itself */
+.mono{
+  font-family:var(--mono); font-size:.625rem; font-weight:400;
+  letter-spacing:.1em; text-transform:uppercase; line-height:1.5;
+}
+
+/* ═══════════ SIDEBAR ═══════════ */
+.rail{ padding:var(--gut); border-bottom:1px solid var(--ink); background:var(--paper); }
+@media (min-width:900px){
+  .rail{
+    position:fixed; inset:0 auto 0 0; width:var(--rail);
+    display:flex; flex-direction:column; overflow-y:auto;
+    border-bottom:0; border-right:1px solid var(--ink);
+  }
+}
+.name{
+  margin:0; font-size:1.9rem; font-weight:500;
+  letter-spacing:-.035em; line-height:1.05;
+}
+.bar{ width:34px; height:2px; background:var(--accent); margin:1rem 0 1.4rem; }
+.bio{ margin:0; font-size:.9375rem; line-height:1.55; color:var(--ink-soft); }
+.bio b{ color:var(--ink); font-weight:500; }
+
+.cta{ margin-top:1.75rem; display:grid; gap:.6rem; }
+.btn{ display:block; text-align:center; padding:.85rem 1rem; border:1px solid var(--ink); transition:all .3s var(--ease); }
+.btn:hover{ transform:translateY(-3px); }
+.btn.solid{ background:var(--ink); color:var(--paper); }
+.btn.solid:hover{ background:var(--accent); border-color:var(--accent); }
+.btn.ghost{
+  background:color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color:var(--accent); border-left-width:3px;
+  color:var(--accent); font-weight:700; letter-spacing:.14em;
+}
+.btn.ghost:hover{ background:color-mix(in srgb, var(--accent) 45%, transparent); }
+
+.nav{ margin-top:2.25rem; border-top:1px solid var(--rule); }
+.nav a{
+  display:flex; align-items:center; gap:.65rem; padding:.85rem 0;
+  border-bottom:1px solid var(--rule); color:var(--ink-soft);
+  transition:color .25s var(--ease);
+}
+.nav a:hover{ color:var(--ink); }
+.tick{ width:0; height:1px; background:var(--accent); transition:width .3s var(--ease); }
+.nav a[data-active]{ color:var(--accent); }
+.nav a[data-active] .tick{ width:22px; }
+
+/* ═══════════ MAIN ═══════════ */
+.main{ padding:var(--gut); }
+@media (min-width:900px){ .main{ margin-left:var(--rail); padding:clamp(2rem,5vh,3rem) clamp(2rem,4vw,3.5rem) 5rem; } }
+
+.block{ padding-top:clamp(3rem,7vh,5rem); }
+.block:first-child{ padding-top:0; }
+
+/* section header:  01 ──────────────── PROJECTS */
+.shead{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.5rem 1rem; margin:0 0 1.75rem; }
+.shead .lbl{ order:1; color:var(--ink); font-size:1.4rem; font-weight:500; }
+.shead .line{ order:2; flex-basis:100%; height:1px; background:var(--ink); margin-top:.6rem; }
+
+/* ── project grid · all cards equal size ── */
+.grid{ display:grid; gap:1.5rem; grid-template-columns:1fr; zoom:.4335; }
+@media (min-width:640px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+
+.card{
+  display:flex; flex-direction:column; border:1px solid var(--rule); background:var(--paper);
+  transition:border-color .3s var(--ease), transform .3s var(--ease);
+}
+.card:hover{ border-color:var(--ink); transform:translateY(-3px); }
+.shot{
+  aspect-ratio:5/3; background:var(--paper-2); border-bottom:1px solid var(--rule);
+  display:flex; align-items:center; justify-content:center; color:var(--ink-soft); overflow:hidden;
+}
+.card-body{ padding:1.25rem 1.25rem 1.5rem; display:flex; flex-direction:column; flex:1; }
+.card h3{ margin:0 0 .5rem; font-size:3rem; font-weight:500; letter-spacing:-.035em; line-height:1.15; }
+.card p{ margin:0 0 1.4rem; font-size:2.2rem; line-height:1.5; color:var(--ink-soft); }
+.more{
+  margin-top:auto; padding-top:1rem; border-top:1px solid var(--rule); font-size:1.9rem;
+  color:var(--accent); display:flex; align-items:center; gap:.5rem;
+  transition:color .25s var(--ease);
+}
+.more i{ font-style:normal; transition:transform .3s var(--ease); }
+.card:hover .more i{ transform:translateX(5px); }
+
+/* ── experience ── */
+.xp{ border-top:1px solid var(--rule); padding-top:1.5rem; }
+.shead + .xp{ border-top:0; padding-top:0; }
+.xp + .xp{ margin-top:2.5rem; }
+.xp-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:.5rem 1rem; padding-right:4rem; }
+.xp-title{ display:flex; align-items:center; gap:.6rem; }
+.xp-logo{ width:1.5rem; height:1.5rem; flex:none; }
+.xp-head h3{ margin:0; font-size:1.25rem; font-weight:500; letter-spacing:-.02em; }
+.xp-meta{ color:var(--ink-soft); font-weight:700; font-size:.8rem; }
+.xp-list{ margin:1rem 0 0; padding-left:1.1rem; max-width:92ch; }
+.xp-list li{ margin:0 0 .6rem; color:var(--ink-soft); line-height:1.55; }
+.xp-list li:last-child{ margin-bottom:0; }
+.xp-figs{ display:grid; gap:1.5rem; margin-top:1.75rem; }
+@media (min-width:700px){ .xp-figs{ grid-template-columns:1fr 1fr; } }
+.xp-figs figure{ margin:0; }
+.xp-figs .xp-figs-full{ grid-column:1/-1; }
+.xp-figs .frame{ background:var(--paper-2); border:1px solid var(--rule); overflow:hidden; }
+.xp-figs figcaption{ margin-top:.6rem; font-size:.75rem; line-height:1.45; color:var(--ink-soft); }
+
+/* ── about ── */
+.about{ display:flex; flex-wrap:wrap; align-items:center; gap:1.5rem; }
+.about-photo-wrap{ flex:1 1 auto; display:flex; justify-content:center; min-width:12rem; }
+.about-photo{
+  width:18.4rem; height:18.4rem; flex:none; border-radius:50%;
+  overflow:hidden; border:1px solid var(--ink);
+}
+.about p{ margin:0 0 1.1rem; max-width:80ch; }
+.about p:last-child{ margin-bottom:0; }
+
+/* ── skills ── */
+.skills{ display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+.skills h3{ margin:0 0 .8rem; padding-bottom:.6rem; border-bottom:1px solid var(--rule); color:var(--accent); font-weight:400; }
+.skills ul{ margin:0; padding:0; list-style:none; }
+.skills li{ padding:.3rem 0; font-size:.9375rem; color:var(--ink-soft); }
+
+/* ── contact ── */
+.email{
+  display:inline-block; margin-top:0;
+  font-size:clamp(1.5rem,4.5vw,2.4rem); font-weight:500; letter-spacing:-.04em;
+  background-image:linear-gradient(var(--accent),var(--accent));
+  background-size:0% 1px; background-position:0 100%; background-repeat:no-repeat;
+  transition:background-size .45s var(--ease), color .3s var(--ease);
+}
+.email:hover{ color:var(--accent); background-size:100% 1px; }
+.social{ margin-top:2rem; display:flex; flex-wrap:wrap; gap:1.5rem; color:var(--ink-soft); }
+.social a:hover{ color:var(--ink); }
+
+/* ── motion ── */
+.rise{ opacity:0; transform:translateY(10px); }
+.shown{ opacity:1; transform:none; transition:opacity .7s var(--ease), transform .7s var(--ease); }
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  .rise{ opacity:1; transform:none; }
+  *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="rail">
+  <!-- EDIT: name + bio -->
+  <h1 class="name">Ahan Dhingra</h1>
+  <div class="bar"></div>
+  <p class="bio">Engineering Physics student building at the intersection of
+    <b>embedded systems, circuit design, and robotics</b>.</p>
+
+  <div class="cta mono">
+    <a class="btn ghost" href="#projects">Projects</a>
+    <a class="btn ghost" href="#experience">Experience</a>
+    <a class="btn ghost" href="#about">About Me</a>
+    <a class="btn ghost" href="#skills">Skills</a>
+    <a class="btn ghost" href="#contact">Contact</a>
+  </div>
+
+
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+
+  <!-- ── 01 PROJECTS ── copy an <a class="card"> block to add one ── -->
+  <section class="block" id="projects">
+    <div class="shead mono rise"><span class="line"></span><span class="lbl">Projects</span></div>
+
+    <div class="grid">
+
+      <a class="card rise" href="projects/project-01.html">
+        <div class="shot">
+          <img src="images/robot_summer.JPG" alt="[Project Name] photo">
+        </div>
+        <div class="card-body">
+          <h3>Mars Habitat Robot</h3>
+          <p>Fully autonomous robot made completely from scratch! Built with 3 teammates for the annual Engineering Physics robotics competition at UBC.</p>
+          <span class="more mono">View full details <i>→</i></span>
+        </div>
+      </a>
+
+      <a class="card rise" href="projects/project-02.html">
+        <div class="shot">
+          <img src="images/Motor%20Control%20Circuit.jpg" alt="Motor control circuit prototyped on a breadboard">
+        </div>
+        <div class="card-body">
+          <h3>Motor Control Circuit</h3>
+          <p>A closed-loop analog/digital circuit that sets and actively holds a DC motor's RPM, no microcontroller involved.</p>
+          <span class="more mono">View full details <i>→</i></span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── 02 EXPERIENCE ── -->
+  <section class="block" id="experience">
+    <div class="shead mono"><span class="line"></span><span class="lbl">Experience</span></div>
+
+    <div class="xp">
+      <div class="xp-head">
+        <div class="xp-title">
+          <img class="xp-logo" src="images/kruger_mark.png" alt="Kruger Products">
+          <h3>Mechatronics Reliability Engineering Intern — Kruger Products</h3>
+        </div>
+        <span class="xp-meta mono">Jan&ndash;May 2026</span>
+      </div>
+
+      <ul class="xp-list">
+        <li>Wrote Python scripts to analyze winder stopping behavior across hundreds of parent rolls, using statistical analysis to reposition the shutoff sensor and reduce end-of-roll paper waste by 5%.</li>
+        <li>Automated production paper-roll consumption tracking with a derivative-based algorithm that detects roll changeovers from live sensor data, cutting manual tracking time by 90%.</li>
+        <li>Analyzed two years of downtime data, maintenance history, operator observations, and equipment records to identify recurring failure causes, converting the findings into 20+ preventative-maintenance work orders in SAP.</li>
+        <li>Built a complete Bill of Materials for two production lines by writing Python scripts to parse 1,500+ pages of engineering drawings into a 10,000-part structured BOM for SAP upload.</li>
+      </ul>
+    </div>
+
+    <div class="xp">
+      <div class="xp-head">
+        <div class="xp-title">
+          <img class="xp-logo" src="images/agrobot_icon.png" alt="UBC Agrobot">
+          <h3>Navigation &amp; Embedded Systems Sub-Team Member — UBC Agrobot</h3>
+        </div>
+        <span class="xp-meta mono">Jan 2026&ndash;Present</span>
+      </div>
+
+      <ul class="xp-list">
+        <li>Integrated LiDAR and IMU data using FAST-LIO in ROS 2 with Python nodes to generate real-time odometry, 3D maps, and obstacle information for autonomous navigation.</li>
+        <li>Implemented UART communication in C++ between an NVIDIA Jetson and STM32 to relay motion commands from the path-planning system to the embedded controller.</li>
+        <li>Interfaced the STM32 with dual stepper-motor drivers over SPI to execute steering commands and control robot turning.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── 03 ABOUT ── -->
+  <section class="block" id="about">
+    <div class="shead mono"><span class="line"></span><span class="lbl">About Me</span></div>
+    <div class="about">
+      <div>
+        <p>Hi! I’m a third-year Engineering Physics student at UBC. My program sits at the intersection of engineering and science, bringing together mechanical, electrical, and software engineering with physics. I’ve come to appreciate that the better I understand the underlying principles behind a system, the easier it is to learn new technologies and tackle unfamiliar real-world problems. </p>
+        <p>I had the opportunity to apply that mindset during my previous co-op at Kruger Products, where I worked on engineering problems in a large-scale industrial environment. Going forward, I’m especially interested in exploring electronics, embedded systems, and PCB design, and continuing to build projects that bring hardware and software together.</p>
+        <p>Outside of engineering, I enjoy reading, playing tennis, and unwinding with video games.</p>
+      </div>
+      <div class="about-photo-wrap">
+        <div class="about-photo">
+          <img src="images/headshot_pic.PNG" alt="Ahan Dhingra">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 SKILLS ── -->
+  <section class="block" id="skills">
+    <div class="shead mono"><span class="line"></span><span class="lbl">Skills</span></div>
+    <div class="skills mono">
+      <div>
+        <h3>Electronics</h3>
+        <ul><li>PCB Design (KiCad)</li><li>Circuit Analysis</li><li>ESP32 / Raspberry Pi</li><li>Oscilloscope + bench work</li><li>Soldering</li></ul>
+      </div>
+      <div>
+        <h3>Software</h3>
+        <ul><li>C / C++</li><li>Python</li><li>ROS 2</li><li>Git</li></ul>
+      </div>
+      <div>
+        <h3>Mechanical</h3>
+        <ul><li>SolidWorks</li><li>Laser cutting</li><li>3D printing</li></ul>
+      </div>
+      <div>
+        <h3>Lab</h3>
+        <ul><li>Data acquisition</li><li>Signal processing</li><li>Technical writing</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 CONTACT ── -->
+  <section class="block" id="contact">
+    <div class="shead mono" style="margin-bottom:1rem"><span class="line"></span><span class="lbl">Contact</span></div>
+    <a class="email" href="mailto:ahandhingra@gmail.com">ahandhingra@gmail.com</a>
+  </section>
+
+</main>
+
+<script>
+/* ── staggered entrance ── */
+document.querySelectorAll(".rise").forEach((el,i) => setTimeout(() => el.classList.add("shown"), 80*i + 100));
+</script>
+</body>
+</html>

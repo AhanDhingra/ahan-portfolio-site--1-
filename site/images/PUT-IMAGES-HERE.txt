@@ -1,0 +1,13 @@
+Photos go in this folder.
+
+Expected right now:
+  robot_summer.JPG   — hero shot, used by index.html and projects/project-01.html
+
+Nice to have (referenced as placeholders in project-01.html):
+  line-sensors.jpg   — Fig. 02
+  metal-coil.jpg     — Fig. 03
+  claw.jpg           — Fig. 04  (label A / B / C on the image to match the legend)
+  detection.jpg      — Fig. 05
+  competition.jpg    — Fig. 07
+
+Delete this file once you've added yours.
